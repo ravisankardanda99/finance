@@ -69,25 +69,25 @@ class Loan(Resource):
 
 class LoanList(Resource):
     def get(self):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        query = 'SELECT * FROM Loan'
-        results = cursor.execute(query)
-        loans = []
-        for row in results:
-            loans.append(
-                {'loan_id': row[0], 'loan_type': row[1], 'customer_id': row[2], 'amount': row[3], 'interest': row[4]})
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            query = 'SELECT * FROM Loan'
+            results = cursor.execute(query)
+            loans = []
+            for row in results:
+                loans.append(
+                    {'loan_id': row[0], 'loan_type': row[1], 'customer_id': row[2], 'amount': row[3], 'interest': row[4]})
         return {'loans': loans}
 
 
 class LoanTypeList(Resource):
     def get(self, loan_type):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        query = 'SELECT * FROM Loan WHERE loan_type=?'
-        results = cursor.execute(query, (loan_type,))
-        loans = []
-        for row in results:
-            loans.append(
-                {'loan_id': row[0], 'loan_type': row[1], 'customer_id': row[2], 'amount': row[3], 'interest': row[4]})
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            query = 'SELECT * FROM Loan WHERE loan_type=?'
+            results = cursor.execute(query, (loan_type,))
+            loans = []
+            for row in results:
+                loans.append(
+                    {'loan_id': row[0], 'loan_type': row[1], 'customer_id': row[2], 'amount': row[3], 'interest': row[4]})
         return {'loans': loans}

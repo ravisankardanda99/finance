@@ -50,12 +50,11 @@ class Customer(Resource):
 class CustomerList(Resource):
     @jwt_required()
     def get(self):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        query = 'SELECT * FROM Customer'
-        results = cursor.execute(query).fetchall()
-        customers = []
-        for customer in results:
-            customers.append({'id': customer[0], 'name': customer[1]})
-        connection.close()
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            query = 'SELECT * FROM Customer'
+            results = cursor.execute(query).fetchall()
+            customers = []
+            for customer in results:
+                customers.append({'id': customer[0], 'name': customer[1]})
         return {'customers': customers}

@@ -5,14 +5,14 @@ import sqlite3
 
 class User(Resource):
     def get(self):
-        con = sqlite3.connect('finance.db')
-        cur = con.cursor()
-        query = 'SELECT * FROM User'
-        result = cur.execute(query)
-        rows = result.fetchall()
-        users = []
-        for row in rows:
-            users.append({'id': row[0], 'username': row[1], 'password': row[2]})
+        with sqlite3.connect('finance.db') as conn:
+            cur = conn.cursor()
+            query = 'SELECT * FROM User'
+            result = cur.execute(query)
+            rows = result.fetchall()
+            users = []
+            for row in rows:
+                users.append({'id': row[0], 'username': row[1], 'password': row[2]})
         return {'users': users}
 
 

@@ -11,34 +11,31 @@ class CustomerModel:
 
     @classmethod
     def find_by_id(cls, customer_id):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        query = 'SELECT * FROM Customer WHERE customer_id=?'
-        result = cursor.execute(query, (customer_id,))
-        row = result.fetchone()
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            query = 'SELECT * FROM Customer WHERE customer_id=?'
+            result = cursor.execute(query, (customer_id,))
+            row = result.fetchone()
         if row:
             return cls(*row)
 
     def insert(self):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        insert_query = 'INSERT INTO Customer VALUES(?, ?)'
-        cursor.execute(insert_query, (self.id, self.name))
-        connection.commit()
-        connection.close()
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            insert_query = 'INSERT INTO Customer VALUES(?, ?)'
+            cursor.execute(insert_query, (self.id, self.name))
+            conn.commit()
 
     def update(self):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        loan_update_query = 'UPDATE Customer SET name = ? WHERE customer_id=?'
-        cursor.execute(loan_update_query, (self.name, self.id))
-        connection.commit()
-        connection.close()
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            loan_update_query = 'UPDATE Customer SET name = ? WHERE customer_id=?'
+            cursor.execute(loan_update_query, (self.name, self.id))
+            conn.commit()
 
     def delete(self):
-        connection = sqlite3.connect('finance.db')
-        cursor = connection.cursor()
-        loan_delete_query = 'DELETE FROM Customer WHERE customer_id=?'
-        cursor.execute(loan_delete_query, (self.id,))
-        connection.commit()
-        connection.close()
+        with sqlite3.connect('finance.db') as conn:
+            cursor = conn.cursor()
+            loan_delete_query = 'DELETE FROM Customer WHERE customer_id=?'
+            cursor.execute(loan_delete_query, (self.id,))
+            conn.commit()
